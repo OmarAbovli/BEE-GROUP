@@ -23,9 +23,15 @@ export default async function handler(
 
     try {
         if (req.method === 'GET') {
-            // Get all products or single product
-            if (req.query.id) {
-                const id = parseInt(req.query.id as string);
+            // Get product ID from query parameter or URL path
+            // URL can be /api/products?id=1 or /api/products/1
+            const idFromQuery = req.query.id as string;
+            const idFromPath = req.url?.split('/').pop()?.split('?')[0];
+            const productId = idFromQuery || (idFromPath && idFromPath !== 'products' ? idFromPath : null);
+
+            if (productId) {
+                // Get single product
+                const id = parseInt(productId);
                 const [product] = await db.select({
                     id: products.id,
                     title: products.title,

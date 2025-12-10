@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Activity, ShieldCheck, Clock, AlertTriangle, Pill, Stethoscope, ChevronRight } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ProductDetail {
     id: number;
@@ -99,7 +100,7 @@ const ProductDetails = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetch(`/api/products?id=${id}`)
+        fetch(`/api/products/${id}`)
             .then(res => res.json())
             .then(data => {
                 setProduct(data);
