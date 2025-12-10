@@ -1,0 +1,34 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1765103923326,
+      "tag": "0000_gorgeous_stingray",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765104806672,
+      "tag": "0001_melodic_madrox",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765107243555,
+      "tag": "0002_stale_vin_gonzales",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765110083105,
+      "tag": "0003_lethal_bloodstorm",
+      "breakpoints": true
+    }
+  ]
+}
