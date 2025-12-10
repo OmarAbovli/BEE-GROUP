@@ -100,7 +100,7 @@ const ProductDetails = () => {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-        fetch(`/api/products/${id}`)
+        fetch(`/api/products?id=${id}`)
             .then(res => res.json())
             .then(data => {
                 setProduct(data);
