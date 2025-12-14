@@ -72,10 +72,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const [uploading, setUploading] = useState(false);
+
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'image_url' | 'model_path') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        setUploading(true);
         try {
             // Convert file to base64
             const reader = new FileReader();
@@ -92,12 +95,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
                     })
                 });
 
+                if (!res.ok) {
+                    throw new Error('Upload failed');
+                }
+
                 const data = await res.json();
                 setFormData(prev => ({ ...prev, [field]: data.url }));
+                setUploading(false);
+                alert('تم رفع الصورة بنجاح!');
             };
         } catch (error) {
             console.error('Error uploading file:', error);
-            alert('Error uploading file');
+            alert('فشل رفع الصورة. حاول مرة أخرى.');
+            setUploading(false);
         }
     };
 
@@ -224,7 +234,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
                         name="category_id"
                         value={formData.category_id}
                         onChange={handleInputChange}
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                        className="flex h-10 w-full rounded-md border border-input bg-white text-gray-900 px-3 py-2 text-sm ring-offset-background"
                     >
                         <option value={1}>شراب (Syrups)</option>
                         <option value={2}>أقراص (Tablets)</option>
@@ -239,7 +249,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
                         name="is_prescription"
                         value={formData.is_prescription}
                         onChange={handleInputChange}
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        className="flex h-10 w-full rounded-md border border-input bg-white text-gray-900 px-3 py-2 text-sm"
                     >
                         <option value="false">لا (OTC)</option>
                         <option value="true">نعم (Rx)</option>
