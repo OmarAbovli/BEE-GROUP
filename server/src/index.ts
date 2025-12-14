@@ -43,14 +43,32 @@ app.get("/", (req, res) => {
     res.json({ message: "Bee Group API is running!" });
 });
 
-// --- Upload API ---
-app.post("/api/upload", upload.single("file"), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
+// --- Upload API (Vercel Blob) ---
+app.post("/api/upload", async (req, res) => {
+    try {
+        const { file, filename } = req.body;
+
+        if (!file || !filename) {
+            return res.status(400).json({ message: 'File and filename are required' });
+        }
+
+        // For local development, use Vercel Blob
+        const { put } = await import('@vercel/blob');
+
+        // Convert base64 to buffer
+        const buffer = Buffer.from(file.split(',')[1] || file, 'base64');
+
+        // Upload to Vercel Blob
+        const blob = await put(filename, buffer, {
+            access: 'public',
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+        });
+
+        return res.status(200).json({ url: blob.url });
+    } catch (error) {
+        console.error('Upload error:', error);
+        return res.status(500).json({ message: 'Internal server error' });
     }
-    // Return the URL to access the file
-    const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
-    res.json({ url: fileUrl });
 });
 
 // --- Products API ---
