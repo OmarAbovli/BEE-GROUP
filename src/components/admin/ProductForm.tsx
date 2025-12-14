@@ -86,6 +86,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
             reader.onload = async () => {
                 const base64 = reader.result as string;
 
+                console.log('Uploading image...');
                 const res = await fetch('/api/upload', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -100,7 +101,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
                 }
 
                 const data = await res.json();
-                setFormData(prev => ({ ...prev, [field]: data.url }));
+                console.log('Image uploaded successfully:', data.url);
+
+                // Update form data with new URL
+                setFormData(prev => {
+                    const updated = { ...prev, [field]: data.url };
+                    console.log('Updated form data:', updated);
+                    return updated;
+                });
+
                 setUploading(false);
                 alert('تم رفع الصورة بنجاح!');
             };
