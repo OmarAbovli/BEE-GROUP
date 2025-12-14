@@ -16,8 +16,10 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "default_secret";
 
+// Middleware - INCREASED LIMIT FOR IMAGE UPLOADS
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
