@@ -74,48 +74,95 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
 
     const [uploading, setUploading] = useState(false);
 
+    // Compress image before upload
+    const compressImage = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target?.result as string;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+
+                    // Resize if too large (max 1200px)
+                    const maxSize = 1200;
+                    if (width > maxSize || height > maxSize) {
+                        if (width > height) {
+                            height = (height / width) * maxSize;
+                            width = maxSize;
+                        } else {
+                            width = (width / height) * maxSize;
+                            height = maxSize;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx?.drawImage(img, 0, 0, width, height);
+
+                    // Compress to JPEG with 0.8 quality
+                    const compressed = canvas.toDataURL('image/jpeg', 0.8);
+                    resolve(compressed);
+                };
+                img.onerror = reject;
+            };
+            reader.onerror = reject;
+        });
+    };
+
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'image_url' | 'model_path') => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        // Check file size (warn if > 5MB)
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (fileSizeMB > 10) {
+            alert('الصورة كبيرة جداً! الحد الأقصى 10 ميجا. سيتم ضغط الصورة تلقائياً.');
+        }
+
         setUploading(true);
         try {
-            // Convert file to base64
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = async () => {
-                const base64 = reader.result as string;
+            console.log(`Original file size: ${fileSizeMB.toFixed(2)}MB`);
 
-                console.log('Uploading image...');
-                const res = await fetch('/api/upload', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        file: base64,
-                        filename: `${Date.now()}-${file.name}`
-                    })
-                });
+            // Compress image
+            const base64 = await compressImage(file);
+            const compressedSizeMB = (base64.length * 0.75) / (1024 * 1024); // Approximate size
+            console.log(`Compressed size: ${compressedSizeMB.toFixed(2)}MB`);
 
-                if (!res.ok) {
-                    throw new Error('Upload failed');
-                }
+            console.log('Uploading image...');
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    file: base64,
+                    filename: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, '.jpg')}`
+                })
+            });
 
-                const data = await res.json();
-                console.log('Image uploaded successfully:', data.url);
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({ message: 'Upload failed' }));
+                throw new Error(errorData.message || 'فشل رفع الصورة');
+            }
 
-                // Update form data with new URL
-                setFormData(prev => {
-                    const updated = { ...prev, [field]: data.url };
-                    console.log('Updated form data:', updated);
-                    return updated;
-                });
+            const data = await res.json();
+            console.log('Image uploaded successfully:', data.url);
 
-                setUploading(false);
-                alert('تم رفع الصورة بنجاح!');
-            };
+            // Update form data with new URL
+            setFormData(prev => {
+                const updated = { ...prev, [field]: data.url };
+                console.log('Updated form data:', updated);
+                return updated;
+            });
+
+            setUploading(false);
+            alert('تم رفع الصورة بنجاح!');
         } catch (error) {
             console.error('Error uploading file:', error);
-            alert('فشل رفع الصورة. حاول مرة أخرى.');
+            alert(`فشل رفع الصورة: ${error instanceof Error ? error.message : 'حاول مرة أخرى'}`);
             setUploading(false);
         }
     };
@@ -271,13 +318,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialData, existingP
                     <div className="flex items-center gap-4">
                         <div className="border p-2 rounded w-24 h-24 flex items-center justify-center bg-gray-50">
                             {formData.image_url ? (
-                                <img src={formData.image_url} alt="Preview" className="max-w-full max-h-full object-contain" />
+                                <img
+                                    key={formData.image_url}
+                                    src={`${formData.image_url}?t=${Date.now()}`}
+                                    alt="Preview"
+                                    className="max-w-full max-h-full object-contain"
+                                />
                             ) : (
                                 <span className="text-gray-400 text-xs text-center">No Image</span>
                             )}
                         </div>
-                        <Input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, 'image_url')} />
+                        <Input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileUpload(e, 'image_url')}
+                            disabled={uploading}
+                        />
                     </div>
+                    {uploading && <p className="text-sm text-blue-600">جاري رفع الصورة...</p>}
                 </div>
 
                 <div className="space-y-2">
