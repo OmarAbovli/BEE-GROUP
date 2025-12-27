@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { HexagonScene } from "./HexagonScene";
 import { BeeBackground } from "./BeeBackground";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Pill } from "lucide-react";
 
 export const HeroSection = () => {
   return (
@@ -28,7 +28,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full mb-8"
         >
-          <Sparkles className="w-4 h-4 text-primary" />
+          <Pill className="w-4 h-4 text-primary" />
           <span className="text-sm font-medium text-foreground/80">
             Pharmaceutical Excellence Since 2018
           </span>

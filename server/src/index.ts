@@ -145,14 +145,36 @@ app.post("/api/products", async (req, res) => {
     }
 });
 
-app.put("/api/products/:id", async (req, res) => {
+// PUT with query parameter (?id=1)
+app.put("/api/products", async (req, res) => {
     try {
-        const { id } = req.params;
+        const id = parseInt(req.query.id as string);
         const productData = req.body;
         const [updatedProduct] = await db
             .update(products)
             .set(productData)
-            .where(eq(products.id, parseInt(id)))
+            .where(eq(products.id, id))
+            .returning();
+
+        if (!updatedProduct) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+        res.json(updatedProduct);
+    } catch (error) {
+        console.error("Error updating product:", error);
+        res.status(500).json({ message: "Error updating product" });
+    }
+});
+
+// PUT with route parameter (/products/1)
+app.put("/api/products/:id", async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const productData = req.body;
+        const [updatedProduct] = await db
+            .update(products)
+            .set(productData)
+            .where(eq(products.id, id))
             .returning();
 
         if (!updatedProduct) {
@@ -170,6 +192,18 @@ app.delete("/api/products/:id", async (req, res) => {
         const { id } = req.params;
         await db.delete(products).where(eq(products.id, parseInt(id)));
         res.status(204).send();
+    } catch (error) {
+        console.error("Error deleting product:", error);
+        res.status(500).json({ message: "Error deleting product" });
+    }
+});
+
+// DELETE product
+app.delete("/api/products", async (req, res) => {
+    try {
+        const id = parseInt(req.query.id as string);
+        await db.delete(products).where(eq(products.id, id));
+        return res.status(204).end();
     } catch (error) {
         console.error("Error deleting product:", error);
         res.status(500).json({ message: "Error deleting product" });

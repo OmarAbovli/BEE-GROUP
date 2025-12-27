@@ -8,8 +8,8 @@ export const BeeCursor = () => {
     const mouseX = useMotionValue(0);
     const mouseY = useMotionValue(0);
 
-    // Smooth out the movement using springs
-    const springConfig = { damping: 25, stiffness: 300, mass: 0.5 };
+    // Smooth out the movement using springs - tuned for faster response (less delay)
+    const springConfig = { damping: 40, stiffness: 1000, mass: 0.1 };
     const smoothX = useSpring(mouseX, springConfig);
     const smoothY = useSpring(mouseY, springConfig);
 
