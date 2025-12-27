@@ -36,14 +36,16 @@ export const Navbar = () => {
     >
       <div className="container mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <motion.a
-          href="#home"
-          className="flex items-center gap-3"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <img src={logo} alt="Bee Group" className="h-12 w-auto" />
-        </motion.a>
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="flex items-center gap-3"
+          >
+            <img src={logo} alt="Bee Group" className="h-12 w-auto" />
+          </motion.div>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
