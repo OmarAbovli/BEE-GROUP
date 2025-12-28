@@ -63,11 +63,11 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Button variant="hero" size="xl" className="group">
+          <Button variant="hero" size="xl" className="group" onClick={() => window.location.href = '/products'}>
             Explore Products
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Button>
-          <Button variant="outline" size="xl">
+          <Button variant="outline" size="xl" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}>
             Learn More
           </Button>
         </motion.div>
