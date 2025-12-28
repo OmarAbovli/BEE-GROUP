@@ -1,9 +1,9 @@
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { EventTimeline } from "@/components/EventTimeline";
+import { BeeBackground } from "@/components/BeeBackground";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { SEO } from "@/components/SEO";
 
 export default function Events() {
     const [events, setEvents] = useState([]);
@@ -24,27 +24,35 @@ export default function Events() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-background relative overflow-hidden" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-            <Navbar />
-
-            {/* Page Header */}
-            <div className="relative pt-32 pb-20 text-center">
-                <div className="absolute top-0 inset-x-0 h-96 bg-primary/5 blur-3xl -z-10" />
-                <h1 className="text-4xl md:text-7xl font-bold mb-6 text-primary drop-shadow-sm">{t('events.title')}</h1>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto px-4">
-                    {t('events.subtitle')}
-                </p>
-            </div>
-
-            {loading ? (
-                <div className="flex justify-center py-20">
-                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <div className="min-h-screen">
+            <SEO
+                title={t('events.title')}
+                description={language === 'ar'
+                    ? "تابع أحدث الفعاليات والمؤتمرات والمناسبات التي تنظمها وتشارك فيها مجموعة بي للأدوية."
+                    : "Follow the latest events, conferences, and occasions organized and participated in by Bee Group Pharmaceuticals."}
+                keywords={language === 'ar'
+                    ? "فعاليات طبية مصر, مؤتمرات أدوية, مناسبات مجموعة بي"
+                    : "egypt medical events, pharma conferences, bee group occasions"}
+            />
+            <BeeBackground />
+            <main className="bg-background relative overflow-hidden" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+                {/* Page Header */}
+                <div className="relative pt-32 pb-20 text-center">
+                    <div className="absolute top-0 inset-x-0 h-96 bg-primary/5 blur-3xl -z-10" />
+                    <h1 className="text-4xl md:text-7xl font-bold mb-6 text-primary drop-shadow-sm">{t('events.title')}</h1>
+                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto px-4">
+                        {t('events.subtitle')}
+                    </p>
                 </div>
-            ) : (
-                <EventTimeline events={events} />
-            )}
 
-            <Footer />
+                {loading ? (
+                    <div className="flex justify-center py-20">
+                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                    </div>
+                ) : (
+                    <EventTimeline events={events} />
+                )}
+            </main>
         </div>
     );
 }

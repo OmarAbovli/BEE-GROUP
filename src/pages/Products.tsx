@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Search } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { HoneycombProducts } from "@/components/HoneycombProducts";
+import { BeeBackground } from "@/components/BeeBackground";
+import { SEO } from "@/components/SEO";
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -115,9 +116,15 @@ const Products = () => {
     }, {} as ProductGroup);
 
     return (
-        <div className="min-h-screen bg-background" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-            <Navbar />
-            <div className="pt-24 pb-12 container mx-auto px-4">
+        <div className="min-h-screen relative">
+            <SEO
+                title={t('nav.products')}
+                description={language === 'ar'
+                    ? "استكشف مجموعة واسعة من المنتجات الصيدلانية والرعاية الصحية عالية الجودة من مجموعة بي."
+                    : "Explore a wide range of high-quality pharmaceutical and healthcare products from Bee Group."}
+            />
+            <BeeBackground />
+            <div className="bg-background pt-24 pb-12 container mx-auto px-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                 <h1 className="text-4xl font-bold text-center mb-6 text-primary">{t('products.title')}</h1>
                 <p className="text-center text-muted-foreground mb-10 max-w-2xl mx-auto">{t('products.subtitle')}</p>
 
@@ -129,13 +136,11 @@ const Products = () => {
                         placeholder={t('search.placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        // Added 'text-foreground' and improved background/border for visibility
                         className={`w-full pl-10 h-12 text-lg rounded-full border-2 border-primary/20 focus:border-primary bg-background text-foreground shadow-sm hover:border-primary/50 transition-colors ${language === 'ar' ? 'pr-10 pl-4' : 'pl-10 pr-4'}`}
                     />
                 </div>
 
                 {loading ? (
-                    // Skeleton Loading
                     <div className="space-y-16">
                         {[1, 2].map((categorySkeleton) => (
                             <div key={categorySkeleton}>
@@ -147,7 +152,6 @@ const Products = () => {
                                             <div className="space-y-2">
                                                 <Skeleton className="h-6 w-3/4" />
                                                 <Skeleton className="h-4 w-full" />
-                                                <Skeleton className="h-4 w-2/3" />
                                             </div>
                                         </div>
                                     ))}
@@ -156,7 +160,6 @@ const Products = () => {
                         ))}
                     </div>
                 ) : (
-                    // Product List
                     Object.keys(filteredProducts).length === 0 ? (
                         <div className="text-center py-20">
                             <p className="text-xl text-muted-foreground">
@@ -191,7 +194,7 @@ const Products = () => {
                                                     <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
                                                         {getLocalized(product, 'title')}
                                                     </h3>
-                                                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 h-[60px]"> {/* Fixed height for alignment */}
+                                                    <p className="text-muted-foreground text-sm mb-4 line-clamp-3 h-[60px]">
                                                         {getLocalized(product, 'description')}
                                                     </p>
                                                     <Button variant="outline" className="w-full group-hover:bg-primary group-hover:text-white transition-all">
@@ -207,7 +210,6 @@ const Products = () => {
                     )
                 )}
             </div>
-            <Footer />
         </div>
     );
 };

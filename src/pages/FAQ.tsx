@@ -1,5 +1,3 @@
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import {
     Accordion,
     AccordionContent,
@@ -7,14 +5,17 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useLanguage } from "@/context/LanguageContext";
+import { BeeBackground } from "@/components/BeeBackground";
+import { SEO } from "@/components/SEO";
 
 const FAQ = () => {
     const { t, language } = useLanguage();
 
     return (
-        <div className="min-h-screen bg-background text-foreground" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-            <Navbar />
-            <div className="container mx-auto px-6 py-24">
+        <div className="min-h-screen relative">
+            <SEO title={t('faq.title')} />
+            <BeeBackground />
+            <div className="bg-background pt-24 pb-12 container mx-auto px-4 relative" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                 <h1 className="text-4xl font-bold mb-8 text-center text-primary">{t('faq.title')}</h1>
                 <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
                     {t('faq.subtitle')}
@@ -52,7 +53,6 @@ const FAQ = () => {
                     </Accordion>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

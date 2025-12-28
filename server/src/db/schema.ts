@@ -23,7 +23,7 @@ export const products = pgTable("products", {
     description: text("description"),
     description_en: text("description_en"),
     image_url: text("image_url"),
-    category_id: serial("category_id").references(() => categories.id),
+    category_id: integer("category_id").references(() => categories.id),
     ingredients: text("ingredients"),
     ingredients_en: text("ingredients_en"),
     usage_instructions: text("usage_instructions"),

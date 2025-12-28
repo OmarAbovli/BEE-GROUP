@@ -1,16 +1,37 @@
-import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
 import { VisionMission } from "@/components/VisionMission";
 import { ProductsSection } from "@/components/ProductsSection";
 import { PartnersSection } from "@/components/PartnersSection";
-import { Footer } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
+import { BeeBackground } from "@/components/BeeBackground";
+import { SEO } from "@/components/SEO";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Index = () => {
+  const { t } = useLanguage();
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
-      <Navbar />
+    <div className="min-h-screen overflow-x-hidden">
+      <SEO
+        title={t('nav.home')}
+        description="Welcome to Bee Group - Your Trusted Pharmaceutical Partner in Egypt."
+        schemaData={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Bee Group",
+          "alternateName": "مجموعة بي",
+          "url": "https://beegroup-eg.com",
+          "logo": "https://beegroup-eg.com/logo.png",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+201000000000",
+            "contactType": "customer service",
+            "areaServed": "EG",
+            "availableLanguage": ["Arabic", "English"]
+          }
+        }}
+      />
+      <BeeBackground />
       <main>
         <HeroSection />
         <AboutSection />
@@ -44,7 +65,6 @@ const Index = () => {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 };

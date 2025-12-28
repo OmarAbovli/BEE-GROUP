@@ -14,12 +14,14 @@ import {
     Trash2,
     Edit,
     CheckCircle,
-    Download
+    Download,
+    Layers
 } from "lucide-react";
 import { ProductForm } from "../components/admin/ProductForm";
 import { EventForm } from "../components/admin/EventForm";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { DashboardAnalytics } from "../components/admin/DashboardAnalytics";
 
 // Interfaces
 interface Product { id: number; title: string; image_url: string; categoryName: string; }
@@ -69,6 +71,7 @@ export default function AdminDashboard() {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [applications, setApplications] = useState<Application[]>([]);
     const [messages, setMessages] = useState<Message[]>([]);
+    const [categories, setCategories] = useState<{ id: number; name: string }[]>([]);
 
     // UI States
     const [showProductForm, setShowProductForm] = useState(false);
@@ -96,6 +99,7 @@ export default function AdminDashboard() {
         fetch("/api/jobs").then(res => res.json()).then(setJobs);
         fetch("/api/applications").then(res => res.json()).then(setApplications);
         fetch("/api/messages").then(res => res.json()).then(setMessages);
+        fetch("/api/categories").then(res => res.json()).then(setCategories);
     };
 
     // --- Handlers ---
@@ -148,6 +152,7 @@ export default function AdminDashboard() {
             <Button variant={activeTab === "jobs" ? "secondary" : "ghost"} className="justify-start gap-2" onClick={() => setActiveTab("jobs")}> <Briefcase size={18} /> الوظائف </Button>
             <Button variant={activeTab === "applications" ? "secondary" : "ghost"} className="justify-start gap-2" onClick={() => setActiveTab("applications")}> <FileText size={18} /> طلبات التوظيف </Button>
             <Button variant={activeTab === "messages" ? "secondary" : "ghost"} className="justify-start gap-2" onClick={() => setActiveTab("messages")}> <MessageSquare size={18} /> الرسائل </Button>
+            <Button variant={activeTab === "categories" ? "secondary" : "ghost"} className="justify-start gap-2" onClick={() => setActiveTab("categories")}> <Layers size={18} /> التصنيفات </Button>
 
             <div className="mt-auto">
                 <Button variant="destructive" className="w-full gap-2" onClick={logout}> <LogOut size={18} /> تسجيل الخروج </Button>
@@ -347,6 +352,48 @@ export default function AdminDashboard() {
                     </div>
                 );
 
+            case "categories":
+                return (
+                    <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <h2 className="text-2xl font-bold">التصنيفات</h2>
+                            <div className="flex gap-2">
+                                <Input
+                                    placeholder="تصنيف جديد"
+                                    id="new-category-input"
+                                    className="w-48"
+                                />
+                                <Button onClick={async () => {
+                                    const input = document.getElementById("new-category-input") as HTMLInputElement;
+                                    if (!input.value) return;
+                                    await fetch("/api/categories", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+                                        body: JSON.stringify({ name: input.value })
+                                    });
+                                    input.value = "";
+                                    fetchAll();
+                                }}>إضافة</Button>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {categories.map(cat => (
+                                <div key={cat.id} className="bg-card p-4 rounded-lg border flex justify-between items-center">
+                                    <span className="font-medium">{cat.name}</span>
+                                    <Button size="icon" variant="ghost" className="text-destructive" onClick={async () => {
+                                        if (!confirm("Delete category?")) return;
+                                        await fetch(`/api/categories/${cat.id}`, {
+                                            method: "DELETE",
+                                            headers: { Authorization: `Bearer ${token}` }
+                                        });
+                                        fetchAll();
+                                    }}><Trash2 size={16} /></Button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                );
+
             case "messages":
                 return (
                     <div className="space-y-4">
@@ -376,23 +423,31 @@ export default function AdminDashboard() {
             case "overview":
             default:
                 return (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div className="bg-card p-6 rounded-xl border shadow-sm">
-                            <h3 className="text-muted-foreground mb-2">إجمالي المنتجات</h3>
-                            <p className="text-3xl font-bold">{products.length}</p>
+                    <div className="space-y-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div className="bg-card p-6 rounded-xl border shadow-sm">
+                                <h3 className="text-muted-foreground mb-2">إجمالي المنتجات</h3>
+                                <p className="text-3xl font-bold">{products.length}</p>
+                            </div>
+                            <div className="bg-card p-6 rounded-xl border shadow-sm">
+                                <h3 className="text-muted-foreground mb-2">الوظائف المعلنة</h3>
+                                <p className="text-3xl font-bold">{jobs.length}</p>
+                            </div>
+                            <div className="bg-card p-6 rounded-xl border shadow-sm">
+                                <h3 className="text-muted-foreground mb-2">طلبات التوظيف</h3>
+                                <p className="text-3xl font-bold">{applications.length}</p>
+                            </div>
+                            <div className="bg-card p-6 rounded-xl border shadow-sm">
+                                <h3 className="text-muted-foreground mb-2">الرسائل الجديدة</h3>
+                                <p className="text-3xl font-bold">{messages.filter(m => m.status === 'unread').length}</p>
+                            </div>
                         </div>
-                        <div className="bg-card p-6 rounded-xl border shadow-sm">
-                            <h3 className="text-muted-foreground mb-2">الوظائف المعلنة</h3>
-                            <p className="text-3xl font-bold">{jobs.length}</p>
-                        </div>
-                        <div className="bg-card p-6 rounded-xl border shadow-sm">
-                            <h3 className="text-muted-foreground mb-2">طلبات التوظيف</h3>
-                            <p className="text-3xl font-bold">{applications.length}</p>
-                        </div>
-                        <div className="bg-card p-6 rounded-xl border shadow-sm">
-                            <h3 className="text-muted-foreground mb-2">الرسائل الجديدة</h3>
-                            <p className="text-3xl font-bold">{messages.filter(m => m.status === 'unread').length}</p>
-                        </div>
+
+                        <DashboardAnalytics
+                            products={products}
+                            applications={applications}
+                            messages={messages}
+                        />
                     </div>
                 );
         }

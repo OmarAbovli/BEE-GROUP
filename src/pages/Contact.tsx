@@ -1,18 +1,26 @@
 import { ContactForm } from "@/components/ContactForm";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import { BeeBackground } from "@/components/BeeBackground";
+import { SEO } from "@/components/SEO";
 
 const Contact = () => {
     const { t, language } = useLanguage();
 
-
     return (
-        <div className="min-h-screen bg-background text-foreground" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-            <Navbar />
-            <div className="container mx-auto px-6 py-24">
+        <div className="min-h-screen relative">
+            <SEO
+                title={t('nav.contact')}
+                description={language === 'ar'
+                    ? "تواصل مع مجموعة بي للأدوية. نحن هنا للإجابة على استفساراتكم وتوفير الدعم اللازم."
+                    : "Contact Bee Group Pharmaceuticals. We are here to answer your inquiries and provide necessary support."}
+                keywords={language === 'ar'
+                    ? "تواصل معنا, عنوان مجموعة بي, اتصل بالأدوية, دعم العملاء"
+                    : "contact us, bee group address, call pharma, customer support"}
+            />
+            <BeeBackground />
+            <div className="container mx-auto px-6 py-24 relative" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                 <div className="text-center mb-16">
                     <h1 className="text-4xl font-bold mb-4 text-primary">{t('contact.title')}</h1>
                     <p className="text-xl text-muted-foreground">{t('contact.subtitle')}</p>
@@ -75,7 +83,6 @@ const Contact = () => {
                     </motion.div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

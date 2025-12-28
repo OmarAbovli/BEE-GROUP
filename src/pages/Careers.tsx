@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
+import { SEO } from "@/components/SEO";
+import { BeeBackground } from "@/components/BeeBackground";
 import { Briefcase, MapPin, Clock, Upload } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -107,9 +107,18 @@ const Careers = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background text-foreground" dir={language === 'ar' ? 'rtl' : 'ltr'}>
-            <Navbar />
-            <div className="container mx-auto px-6 py-24">
+        <div className="min-h-screen relative">
+            <SEO
+                title={t('nav.careers')}
+                description={language === 'ar'
+                    ? "انضم إلى فريقنا المتميز في مجموعة بي للأدوية. استكشف فرص العمل الحالية وابدأ مسيرتك المهنية معنا."
+                    : "Join our distinguished team at Bee Group Pharmaceuticals. Explore current job opportunities and start your career with us."}
+                keywords={language === 'ar'
+                    ? "وظائف أدوية مصر, وظائف طبية, انضم لمجموعة بي, مهن صحية"
+                    : "egypt pharma jobs, medical careers, join bee group, healthcare professions"}
+            />
+            <BeeBackground />
+            <div className="bg-background pt-24 pb-12 container mx-auto px-6" dir={language === 'ar' ? 'rtl' : 'ltr'}>
                 <div className="text-center mb-16">
                     <h1 className="text-4xl font-bold mb-4 text-primary">{t('careers.title')}</h1>
                     <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -250,7 +259,6 @@ const Careers = () => {
                     </p>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };
