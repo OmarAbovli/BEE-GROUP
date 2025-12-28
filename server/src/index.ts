@@ -22,30 +22,33 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Configure Multer for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        // Use /tmp for serverless environment, or fallback to local uploads
-        const uploadDir = process.env.NODE_ENV === 'production'
-            ? '/tmp'
-            : path.join(__dirname, "../uploads");
-
-        if (!fs.existsSync(uploadDir)) {
-            try {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            } catch (e) {
-                console.error("Failed to create upload dir:", e);
+// Configure Multer for file uploads
+const storage = process.env.NODE_ENV === 'production'
+    ? multer.memoryStorage()
+    : multer.diskStorage({
+        destination: (req, file, cb) => {
+            const uploadDir = path.join(__dirname, "../uploads");
+            if (!fs.existsSync(uploadDir)) {
+                try {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                } catch (e) {
+                    console.error("Failed to create upload dir:", e);
+                }
             }
+            cb(null, uploadDir);
+        },
+        filename: (req, file, cb) => {
+            const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+            cb(null, uniqueSuffix + path.extname(file.originalname));
         }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, uniqueSuffix + path.extname(file.originalname));
-    }
-});
+    });
+
 const upload = multer({ storage: storage });
 
-app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+// Only serve static uploads locally
+if (process.env.NODE_ENV !== "production") {
+    app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+}
 
 app.get("/", (req, res) => {
     res.json({ message: "Bee Group API is running!" });
