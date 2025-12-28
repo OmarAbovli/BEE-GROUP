@@ -413,6 +413,12 @@ app.put("/api/messages/:id/read", async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Export for Vercel
+export default app;
+
+// Only listen if not running on Vercel (local development)
+if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
