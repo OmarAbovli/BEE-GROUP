@@ -24,9 +24,17 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Configure Multer for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, "../uploads");
+        // Use /tmp for serverless environment, or fallback to local uploads
+        const uploadDir = process.env.NODE_ENV === 'production'
+            ? '/tmp'
+            : path.join(__dirname, "../uploads");
+
         if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
+            try {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            } catch (e) {
+                console.error("Failed to create upload dir:", e);
+            }
         }
         cb(null, uploadDir);
     },
