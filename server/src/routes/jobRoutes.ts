@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getJobs, createJob, deleteJob, applyToJob, getApplications, updateApplicationStatus } from "../controllers/jobController";
-import { authenticateToken } from "../middleware/auth";
+import { getJobs, createJob, deleteJob, applyToJob, getApplications, updateApplicationStatus } from "../controllers/jobController.js";
+import { authenticateToken } from "../middleware/auth.js";
 
 const router = Router();
 
