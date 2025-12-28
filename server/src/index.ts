@@ -72,10 +72,10 @@ app.post("/api/upload", async (req, res) => {
 
 // --- Local Upload API (Multer) ---
 app.post("/api/upload-local", upload.single('file'), (req, res) => {
-    if (!req.file) {
+    if (!(req as any).file) {
         return res.status(400).json({ message: "No file uploaded" });
     }
-    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${(req as any).file.filename}`;
     res.json({ url: fileUrl });
 });
 
