@@ -382,16 +382,23 @@ app.put("/api/applications/:id/status", async (req, res) => {
 
 // --- Messages API ---
 
+// Health Check
+app.get("/api/check", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 app.post("/api/contact", async (req, res) => {
+    console.log("Contact form submission:", req.body);
     try {
         const { name, email, phone, subject, message } = req.body;
         const newMsg = await db.insert(messages).values({
             name, email, phone, subject, message
         }).returning();
+        console.log("Message saved:", newMsg[0]);
         res.json(newMsg[0]);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: "Failed to send message" });
+        console.error("Contact error:", err);
+        res.status(500).json({ error: "Failed to send message", details: String(err) });
     }
 });
 
