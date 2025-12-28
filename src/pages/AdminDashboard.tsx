@@ -125,12 +125,21 @@ export default function AdminDashboard() {
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
             body: JSON.stringify(newJob)
         });
+        setNewJob({
+            title: "", title_en: "", location: "Cairo", location_en: "Cairo", type: "Full-time", type_en: "Full-time",
+            description: "", description_en: "", requirements: "", requirements_en: "",
+            salary_range: "", salary_range_en: "", experience_level: "", experience_level_en: "",
+            work_mode: "On-site", work_mode_en: "On-site", benefits: "", benefits_en: ""
+        });
         setShowJobForm(false);
         fetchAll();
     };
     const handleDeleteJob = async (id: number) => {
         if (!confirm("Delete job?")) return;
-        await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+        await fetch(`/api/jobs/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+        });
         fetchAll();
     };
 
@@ -234,13 +243,28 @@ export default function AdminDashboard() {
                                 <Input placeholder="Job Title (English)" value={newJob.title_en} onChange={e => setNewJob({ ...newJob, title_en: e.target.value })} />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <Input placeholder="الوصف (عربي)" value={newJob.description} onChange={e => setNewJob({ ...newJob, description: e.target.value })} />
-                                <Input placeholder="Description (English)" value={newJob.description_en} onChange={e => setNewJob({ ...newJob, description_en: e.target.value })} />
+                                <Textarea placeholder="الوصف (عربي)" value={newJob.description} onChange={e => setNewJob({ ...newJob, description: e.target.value })} />
+                                <Textarea placeholder="Description (English)" value={newJob.description_en} onChange={e => setNewJob({ ...newJob, description_en: e.target.value })} />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <Textarea placeholder="المتطلبات (عربي)" value={newJob.requirements} onChange={e => setNewJob({ ...newJob, requirements: e.target.value })} />
+                                <Textarea placeholder="Requirements (English)" value={newJob.requirements_en} onChange={e => setNewJob({ ...newJob, requirements_en: e.target.value })} />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <Input placeholder="الموقع (عربي)" value={newJob.location} onChange={e => setNewJob({ ...newJob, location: e.target.value })} />
+                                <Input placeholder="Location (English)" value={newJob.location_en} onChange={e => setNewJob({ ...newJob, location_en: e.target.value })} />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <Input placeholder="نوع العمل (عربي - مثلاً: دوام كامل)" value={newJob.type} onChange={e => setNewJob({ ...newJob, type: e.target.value })} />
+                                <Input placeholder="Job Type (English - e.g. Full-time)" value={newJob.type_en} onChange={e => setNewJob({ ...newJob, type_en: e.target.value })} />
                             </div>
 
                             <div className="border-t pt-4 mt-4">
                                 <h4 className="font-bold mb-3 text-sm text-muted-foreground">تفاصيل إضافية (اختياري)</h4>
-                                <div className="grid grid-cols-2 gap-4 space-y-2">
+                                <div className="grid grid-cols-2 gap-4">
                                     <Input placeholder="نطاق الراتب (مثلاً: 5000-7000)" value={newJob.salary_range} onChange={e => setNewJob({ ...newJob, salary_range: e.target.value })} />
                                     <Input placeholder="Salary Range (e.g. 5000-7000)" value={newJob.salary_range_en} onChange={e => setNewJob({ ...newJob, salary_range_en: e.target.value })} />
 
@@ -250,8 +274,8 @@ export default function AdminDashboard() {
                                     <Input placeholder="نظام العمل (مثلاً: عن بعد)" value={newJob.work_mode} onChange={e => setNewJob({ ...newJob, work_mode: e.target.value })} />
                                     <Input placeholder="Work Mode (e.g. Remote)" value={newJob.work_mode_en} onChange={e => setNewJob({ ...newJob, work_mode_en: e.target.value })} />
 
-                                    <Textarea placeholder="المميزات والبدلات (عربي)" className="col-span-1" value={newJob.benefits} onChange={e => setNewJob({ ...newJob, benefits: e.target.value })} />
-                                    <Textarea placeholder="Benefits (English)" className="col-span-1" value={newJob.benefits_en} onChange={e => setNewJob({ ...newJob, benefits_en: e.target.value })} />
+                                    <Textarea placeholder="المميزات والبدلات (عربي)" value={newJob.benefits} onChange={e => setNewJob({ ...newJob, benefits: e.target.value })} />
+                                    <Textarea placeholder="Benefits (English)" value={newJob.benefits_en} onChange={e => setNewJob({ ...newJob, benefits_en: e.target.value })} />
                                 </div>
                             </div>
                             <div className="flex gap-2 justify-end mt-4">

@@ -167,84 +167,136 @@ const Careers = () => {
                                 </div>
                                 <Dialog>
                                     <DialogTrigger asChild>
-                                        <Button className="w-full mt-auto" variant="outline" onClick={() => setSelectedJob(job)}>{t('careers.apply')}</Button>
+                                        <Button className="w-full mt-auto" variant="outline" onClick={() => setSelectedJob(job)}>
+                                            {language === 'ar' ? "عرض التفاصيل والتقديم" : "View Details & Apply"}
+                                        </Button>
                                     </DialogTrigger>
                                     <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                                         <DialogHeader>
-                                            <DialogTitle className="text-2xl">{t('careers.applyFor')} {language === 'ar' ? job.title : (job.title_en || job.title)}</DialogTitle>
+                                            <DialogTitle className="text-2xl">{language === 'ar' ? "تفاصيل الوظيفة والتقديم" : "Job Details & Application"}</DialogTitle>
                                         </DialogHeader>
-                                        <form onSubmit={handleSubmitApplication} className="space-y-6 py-4">
-                                            {/* Section 1: Personal Info */}
-                                            <div className="space-y-4">
-                                                <h4 className="font-semibold border-b pb-2">Personal Information</h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Full Name <span className="text-red-500">*</span></label>
-                                                        <Input placeholder="John Doe" value={application.name} onChange={e => setApplication({ ...application, name: e.target.value })} required />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Email Address <span className="text-red-500">*</span></label>
-                                                        <Input type="email" placeholder="john@example.com" value={application.email} onChange={e => setApplication({ ...application, email: e.target.value })} required />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Phone Number <span className="text-red-500">*</span></label>
-                                                        <Input placeholder="+20 123 456 7890" value={application.phone} onChange={e => setApplication({ ...application, phone: e.target.value })} required />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Expected Salary</label>
-                                                        <Input placeholder="e.g. 5000 EGP" value={application.expected_salary} onChange={e => setApplication({ ...application, expected_salary: e.target.value })} />
-                                                    </div>
-                                                </div>
-                                            </div>
 
-                                            {/* Section 2: Professional Details */}
-                                            <div className="space-y-4">
-                                                <h4 className="font-semibold border-b pb-2">Professional Details</h4>
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Years of Experience</label>
-                                                        <Input placeholder="e.g. 3 years" value={application.experience_years} onChange={e => setApplication({ ...application, experience_years: e.target.value })} />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Graduation Year</label>
-                                                        <Input placeholder="e.g. 2020" value={application.graduation_year} onChange={e => setApplication({ ...application, graduation_year: e.target.value })} />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">LinkedIn URL</label>
-                                                        <Input placeholder="https://linkedin.com/in/..." value={application.linkedin_url} onChange={e => setApplication({ ...application, linkedin_url: e.target.value })} />
-                                                    </div>
-                                                    <div className="space-y-2">
-                                                        <label className="text-sm font-medium">Portfolio URL</label>
-                                                        <Input placeholder="https://behance.net/..." value={application.portfolio_url} onChange={e => setApplication({ ...application, portfolio_url: e.target.value })} />
+                                        <div className="mt-4 space-y-6">
+                                            {/* Job Details Section */}
+                                            <div className="space-y-4 bg-primary/5 p-6 rounded-xl border border-primary/10">
+                                                <div>
+                                                    <h3 className="text-xl font-bold text-primary mb-2">{language === 'ar' ? job.title : (job.title_en || job.title)}</h3>
+                                                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
+                                                        <span className="flex items-center gap-1"><MapPin size={14} /> {language === 'ar' ? job.location : (job.location_en || job.location)}</span>
+                                                        <span className="flex items-center gap-1"><Clock size={14} /> {language === 'ar' ? job.type : (job.type_en || job.type)}</span>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            {/* Section 3: CV & Message */}
-                                            <div className="space-y-4">
-                                                <h4 className="font-semibold border-b pb-2">Documents & Message</h4>
-                                                <div className="space-y-2">
-                                                    <label className="text-sm font-medium">Cover Letter / Message</label>
-                                                    <Textarea placeholder="Tell us why you're a good fit..." value={application.message} onChange={e => setApplication({ ...application, message: e.target.value })} />
-                                                </div>
-                                                <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors bg-muted/20">
-                                                    <Input type="file" className="hidden" id="cv-upload" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
-                                                    <label htmlFor="cv-upload" className="cursor-pointer flex flex-col items-center gap-2 w-full h-full justify-center">
-                                                        <Upload className="w-8 h-8 text-primary/70" />
-                                                        <div className="text-sm">
-                                                            <span className="font-bold text-primary">Click to upload CV</span> or drag and drop
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <h4 className="font-bold border-b pb-1 mb-2">{language === 'ar' ? "الوصف الوظيفي" : "Job Description"}</h4>
+                                                        <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                                                            {language === 'ar' ? job.description : (job.description_en || job.description)}
+                                                        </p>
+                                                    </div>
+
+                                                    {(language === 'ar' ? job.requirements : (job.requirements_en || job.requirements)) && (
+                                                        <div>
+                                                            <h4 className="font-bold border-b pb-1 mb-2">{language === 'ar' ? "المتطلبات" : "Requirements"}</h4>
+                                                            <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                                                                {language === 'ar' ? job.requirements : (job.requirements_en || job.requirements)}
+                                                            </p>
                                                         </div>
-                                                        <span className="text-xs text-muted-foreground">{application.cv_file ? application.cv_file.name : "PDF, DOC, DOCX up to 10MB"}</span>
-                                                    </label>
+                                                    )}
+
+                                                    {(language === 'ar' ? job.benefits : (job.benefits_en || job.benefits)) && (
+                                                        <div>
+                                                            <h4 className="font-bold border-b pb-1 mb-2">{language === 'ar' ? "المميزات والبدلات" : "Benefits"}</h4>
+                                                            <p className="text-sm whitespace-pre-wrap leading-relaxed">
+                                                                {language === 'ar' ? job.benefits : (job.benefits_en || job.benefits)}
+                                                            </p>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
 
-                                            <div className="pt-4">
-                                                <Button type="submit" className="w-full h-12 text-lg font-bold" disabled={isSubmitting}>
-                                                    {isSubmitting ? t('common.loading') : t('careers.send')}
-                                                </Button>
+                                            <div className="relative">
+                                                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                                                    <div className="w-full border-t border-muted"></div>
+                                                </div>
+                                                <div className="relative flex justify-center text-sm">
+                                                    <span className="bg-background px-4 text-muted-foreground font-medium">{language === 'ar' ? "نموذج التقديم" : "Application Form"}</span>
+                                                </div>
                                             </div>
-                                        </form>
+
+                                            <form onSubmit={handleSubmitApplication} className="space-y-6">
+                                                {/* Section 1: Personal Info */}
+                                                <div className="space-y-4">
+                                                    <h4 className="font-semibold border-b pb-2">Personal Information</h4>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Full Name <span className="text-red-500">*</span></label>
+                                                            <Input placeholder="John Doe" value={application.name} onChange={e => setApplication({ ...application, name: e.target.value })} required />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Email Address <span className="text-red-500">*</span></label>
+                                                            <Input type="email" placeholder="john@example.com" value={application.email} onChange={e => setApplication({ ...application, email: e.target.value })} required />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Phone Number <span className="text-red-500">*</span></label>
+                                                            <Input placeholder="+20 123 456 7890" value={application.phone} onChange={e => setApplication({ ...application, phone: e.target.value })} required />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Expected Salary</label>
+                                                            <Input placeholder="e.g. 5000 EGP" value={application.expected_salary} onChange={e => setApplication({ ...application, expected_salary: e.target.value })} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Section 2: Professional Details */}
+                                                <div className="space-y-4">
+                                                    <h4 className="font-semibold border-b pb-2">Professional Details</h4>
+                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Years of Experience</label>
+                                                            <Input placeholder="e.g. 3 years" value={application.experience_years} onChange={e => setApplication({ ...application, experience_years: e.target.value })} />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Graduation Year</label>
+                                                            <Input placeholder="e.g. 2020" value={application.graduation_year} onChange={e => setApplication({ ...application, graduation_year: e.target.value })} />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">LinkedIn URL</label>
+                                                            <Input placeholder="https://linkedin.com/in/..." value={application.linkedin_url} onChange={e => setApplication({ ...application, linkedin_url: e.target.value })} />
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <label className="text-sm font-medium">Portfolio URL</label>
+                                                            <Input placeholder="https://behance.net/..." value={application.portfolio_url} onChange={e => setApplication({ ...application, portfolio_url: e.target.value })} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Section 3: CV & Message */}
+                                                <div className="space-y-4">
+                                                    <h4 className="font-semibold border-b pb-2">Documents & Message</h4>
+                                                    <div className="space-y-2">
+                                                        <label className="text-sm font-medium">Cover Letter / Message</label>
+                                                        <Textarea placeholder="Tell us why you're a good fit..." value={application.message} onChange={e => setApplication({ ...application, message: e.target.value })} />
+                                                    </div>
+                                                    <div className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:bg-muted/50 transition-colors bg-muted/20">
+                                                        <Input type="file" className="hidden" id="cv-upload" onChange={handleFileChange} accept=".pdf,.doc,.docx" />
+                                                        <label htmlFor="cv-upload" className="cursor-pointer flex flex-col items-center gap-2 w-full h-full justify-center">
+                                                            <Upload className="w-8 h-8 text-primary/70" />
+                                                            <div className="text-sm">
+                                                                <span className="font-bold text-primary">Click to upload CV</span> or drag and drop
+                                                            </div>
+                                                            <span className="text-xs text-muted-foreground">{application.cv_file ? application.cv_file.name : "PDF, DOC, DOCX up to 10MB"}</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div className="pt-4">
+                                                    <Button type="submit" className="w-full h-12 text-lg font-bold" disabled={isSubmitting}>
+                                                        {isSubmitting ? t('common.loading') : t('careers.send')}
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </DialogContent>
                                 </Dialog>
                             </div>
