@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { db } from "../db";
-import { messages } from "../db/schema";
+import { db } from "../db/index.js";
+import { messages } from "../db/schema.js";
 import { desc, eq } from "drizzle-orm";
-import { sendAdminNotification } from "../utils/email";
+import { sendAdminNotification } from "../utils/email.js";
 
 
 export const sendMessage = async (req: Request, res: Response) => {

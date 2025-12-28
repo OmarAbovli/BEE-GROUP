@@ -94,11 +94,12 @@ export default function AdminDashboard() {
     }, [user, navigate]);
 
     const fetchAll = () => {
+        const headers = { Authorization: `Bearer ${token}` };
         fetch("/api/products").then(res => res.json()).then(data => setProducts(Object.values(data).flat() as Product[]));
         fetch("/api/events").then(res => res.json()).then(setEvents);
         fetch("/api/jobs").then(res => res.json()).then(setJobs);
-        fetch("/api/applications").then(res => res.json()).then(setApplications);
-        fetch("/api/messages").then(res => res.json()).then(setMessages);
+        fetch("/api/jobs/applications", { headers }).then(res => res.json()).then(setApplications);
+        fetch("/api/messages", { headers }).then(res => res.json()).then(setMessages);
         fetch("/api/categories").then(res => res.json()).then(setCategories);
     };
 
@@ -135,7 +136,10 @@ export default function AdminDashboard() {
 
     // Message Handlers
     const markMessageRead = async (id: number) => {
-        await fetch(`/api/messages/${id}/read`, { method: "PUT" });
+        await fetch(`/api/messages/${id}/read`, {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${token}` }
+        });
         fetchAll();
     };
 
@@ -330,9 +334,12 @@ export default function AdminDashboard() {
                                                 className="bg-background border rounded px-2 py-1 text-sm"
                                                 value={app.status || 'pending'}
                                                 onChange={async (e) => {
-                                                    await fetch(`/api/applications/${app.id}/status`, {
+                                                    await fetch(`/api/jobs/applications/${app.id}/status`, {
                                                         method: "PUT",
-                                                        headers: { "Content-Type": "application/json" },
+                                                        headers: {
+                                                            "Content-Type": "application/json",
+                                                            Authorization: `Bearer ${token}`
+                                                        },
                                                         body: JSON.stringify({ status: e.target.value })
                                                     });
                                                     fetchAll();
@@ -439,7 +446,7 @@ export default function AdminDashboard() {
                             </div>
                             <div className="bg-card p-6 rounded-xl border shadow-sm">
                                 <h3 className="text-muted-foreground mb-2">الرسائل الجديدة</h3>
-                                <p className="text-3xl font-bold">{messages.filter(m => m.status === 'unread').length}</p>
+                                <p className="text-3xl font-bold">{Array.isArray(messages) ? messages.filter(m => m.status === 'unread').length : 0}</p>
                             </div>
                         </div>
 

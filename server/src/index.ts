@@ -6,12 +6,12 @@ import fs from "fs";
 import multer from "multer";
 
 // Routes
-import authRoutes from "./routes/authRoutes";
-import productRoutes from "./routes/productRoutes";
-import eventRoutes from "./routes/eventRoutes";
-import jobRoutes from "./routes/jobRoutes";
-import messageRoutes from "./routes/messageRoutes";
-import categoryRoutes from "./routes/categoryRoutes";
+import authRoutes from "./routes/authRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
+import jobRoutes from "./routes/jobRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 dotenv.config();
 
