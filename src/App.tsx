@@ -12,6 +12,10 @@ import Admin from "./pages/Admin";
 import AdminDashboard from "./pages/AdminDashboard";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
+import Contact from "./pages/Contact";
+import Careers from "./pages/Careers";
+import FAQ from "./pages/FAQ";
+import Terms from "./pages/Terms";
 
 import { AuthProvider } from "./context/AuthContext";
 import { BeeCursor } from "./components/BeeCursor";
@@ -38,6 +42,13 @@ const App = () => (
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetails />} />
+
+              {/* Footer Pages */}
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/terms" element={<Terms />} />
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

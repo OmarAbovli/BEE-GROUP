@@ -126,7 +126,7 @@ const Products = () => {
                     <Search className={`absolute top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5 ${language === 'ar' ? 'right-3' : 'left-3'}`} />
                     <Input
                         type="text"
-                        placeholder={language === 'ar' ? "ابحث عن منتج..." : "Search for a product..."}
+                        placeholder={t('search.placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         // Added 'text-foreground' and improved background/border for visibility
@@ -160,7 +160,7 @@ const Products = () => {
                     Object.keys(filteredProducts).length === 0 ? (
                         <div className="text-center py-20">
                             <p className="text-xl text-muted-foreground">
-                                {searchQuery ? (language === 'ar' ? "لا توجد نتائج بحث" : "No products found") : t('common.loading')}
+                                {searchQuery ? t('search.noResults') : t('common.loading')}
                             </p>
                         </div>
                     ) : (

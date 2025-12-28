@@ -1,58 +1,52 @@
 import { motion } from "framer-motion";
-import { Facebook, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
-
-const footerLinks = {
-  company: [
-    { name: "About Us", href: "#about" },
-    { name: "Our Vision", href: "#vision" },
-    { name: "Products", href: "#products" },
-    { name: "Partners", href: "#partners" },
-  ],
-  services: [
-    { name: "General Medicine", href: "#" },
-    { name: "Specialty Drugs", href: "#" },
-    { name: "Healthcare Solutions", href: "#" },
-    { name: "Order Products", href: "#" },
-  ],
-  support: [
-    { name: "Contact Us", href: "#" },
-    { name: "Career", href: "#" },
-    { name: "FAQ", href: "#" },
-    { name: "Terms of Service", href: "#" },
-  ],
-};
+import { Link } from "react-router-dom";
+import { useLanguage } from "@/context/LanguageContext";
 
 const socialLinks = [
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:info@beegroup-eg.com", label: "Email" },
+  { icon: Mail, href: "mailto:info@beegroub.com", label: "Email" },
 ];
 
 export const Footer = () => {
+  const { t } = useLanguage();
+
+  const footerLinks = {
+    company: [
+      { name: t('footer.aboutUs'), href: "/about" },
+      { name: t('footer.products'), href: "/products" },
+    ],
+    support: [
+      { name: t('footer.company'), href: "/contact" }, // Using "Company" as generic contact/support
+      { name: t('footer.order'), href: "/contact" },
+      { name: t('footer.careers'), href: "/careers" },
+      { name: t('footer.faq'), href: "/faq" },
+      { name: t('footer.terms'), href: "/terms" },
+    ],
+  };
+
   return (
-    <footer className="bg-card/50 border-t border-border">
+    <footer className="bg-card/50 border-t border-border relative z-50">
       <div className="container mx-auto px-6 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <motion.a
-              href="#home"
-              className="inline-block mb-6"
-              whileHover={{ scale: 1.05 }}
-            >
-              <img src={logo} alt="Bee Group" className="h-14 w-auto" />
-            </motion.a>
+            <Link to="/" className="inline-block mb-6">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+              >
+                <img src={logo} alt="Bee Group" className="h-14 w-auto" />
+              </motion.div>
+            </Link>
 
             <p className="text-muted-foreground mb-6 max-w-sm">
-              Bee Group Pharmaceuticals - Your trusted partner in healthcare,
-              delivering innovative medications since 2018.
+              {t('footer.desc')}
             </p>
 
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-primary" />
-                <span>TANTA ,GARBIA ,EGYPT</span>
+                <span>{t('footer.address')}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-primary" />
@@ -67,48 +61,32 @@ export const Footer = () => {
 
           {/* Links */}
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Company</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t('footer.company')}</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
+                <li key={link.href + link.name}>
+                  <Link
+                    to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-foreground mb-4">Products</h4>
-            <ul className="space-y-3">
-              {footerLinks.services.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-muted-foreground hover:text-primary transition-colors text-sm"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="font-semibold text-foreground mb-4">Support</h4>
+            <h4 className="font-semibold text-foreground mb-4">{t('footer.support')}</h4>
             <ul className="space-y-3">
               {footerLinks.support.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
+                <li key={link.href + link.name}>
+                  <Link
+                    to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -118,7 +96,7 @@ export const Footer = () => {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} Bee Group Pharmaceuticals. All rights reserved.
+            © {new Date().getFullYear()} {t('footer.rights')}
           </p>
 
           <div className="flex items-center gap-4">

@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { db } from "./db";
-import { users, products, categories, events } from "./db/schema";
+import { users, products, categories, events, jobs, applications, messages } from "./db/schema";
 import { eq, desc } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -45,30 +45,27 @@ app.get("/", (req, res) => {
 
 // --- Upload API (Vercel Blob) ---
 app.post("/api/upload", async (req, res) => {
+    // ... existing blob logic ...
     try {
         const { file, filename } = req.body;
-
-        if (!file || !filename) {
-            return res.status(400).json({ message: 'File and filename are required' });
-        }
-
-        // For local development, use Vercel Blob
+        // ...
         const { put } = await import('@vercel/blob');
-
-        // Convert base64 to buffer
         const buffer = Buffer.from(file.split(',')[1] || file, 'base64');
-
-        // Upload to Vercel Blob
-        const blob = await put(filename, buffer, {
-            access: 'public',
-            token: process.env.BLOB_READ_WRITE_TOKEN,
-        });
-
+        const blob = await put(filename, buffer, { access: 'public', token: process.env.BLOB_READ_WRITE_TOKEN });
         return res.status(200).json({ url: blob.url });
     } catch (error) {
         console.error('Upload error:', error);
         return res.status(500).json({ message: 'Internal server error' });
     }
+});
+
+// --- Local Upload API (Multer) ---
+app.post("/api/upload-local", upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+    }
+    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+    res.json({ url: fileUrl });
 });
 
 // --- Products API ---
@@ -283,6 +280,136 @@ app.post("/api/login", async (req, res) => {
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+// --- Jobs API ---
+
+app.get("/api/jobs", async (req, res) => {
+    try {
+        const allJobs = await db.select().from(jobs).where(eq(jobs.isActive, "true")).orderBy(desc(jobs.createdAt));
+        res.json(allJobs);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch jobs" });
+    }
+});
+
+app.post("/api/jobs", async (req, res) => {
+    try {
+        const {
+            title, title_en, location, location_en, type, type_en,
+            description, description_en, requirements, requirements_en,
+            salary_range, salary_range_en, experience_level, experience_level_en,
+            work_mode, work_mode_en, benefits, benefits_en
+        } = req.body;
+        const newJob = await db.insert(jobs).values({
+            title, title_en, location, location_en, type, type_en,
+            description, description_en, requirements, requirements_en,
+            salary_range, salary_range_en, experience_level, experience_level_en,
+            work_mode, work_mode_en, benefits, benefits_en
+        }).returning();
+        res.json(newJob[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to create job" });
+    }
+});
+
+app.delete("/api/jobs/:id", async (req, res) => {
+    try {
+        await db.delete(jobs).where(eq(jobs.id, Number(req.params.id)));
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to delete job" });
+    }
+});
+
+// --- Applications API ---
+
+app.post("/api/apply", async (req, res) => {
+    try {
+        const { job_id, name, email, phone, cv_url, message, linkedin_url, portfolio_url, experience_years, expected_salary, graduation_year } = req.body;
+        const newApp = await db.insert(applications).values({
+            job_id: job_id ? Number(job_id) : null,
+            name, email, phone, cv_url, message,
+            linkedin_url, portfolio_url, experience_years, expected_salary, graduation_year
+        }).returning();
+        res.json(newApp[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to submit application" });
+    }
+});
+
+app.get("/api/applications", async (req, res) => {
+    try {
+        const allApps = await db.select({
+            id: applications.id,
+            name: applications.name,
+            email: applications.email,
+            phone: applications.phone,
+            cv_url: applications.cv_url,
+            message: applications.message,
+            linkedin_url: applications.linkedin_url,
+            portfolio_url: applications.portfolio_url,
+            experience_years: applications.experience_years,
+            expected_salary: applications.expected_salary,
+            graduation_year: applications.graduation_year,
+            status: applications.status,
+            createdAt: applications.createdAt,
+            jobTitle: jobs.title
+        })
+            .from(applications)
+            .leftJoin(jobs, eq(applications.job_id, jobs.id))
+            .orderBy(desc(applications.createdAt));
+
+        res.json(allApps);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to fetch applications" });
+    }
+});
+
+app.put("/api/applications/:id/status", async (req, res) => {
+    try {
+        const { status } = req.body;
+        await db.update(applications).set({ status }).where(eq(applications.id, Number(req.params.id)));
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to update application status" });
+    }
+});
+
+// --- Messages API ---
+
+app.post("/api/contact", async (req, res) => {
+    try {
+        const { name, email, phone, subject, message } = req.body;
+        const newMsg = await db.insert(messages).values({
+            name, email, phone, subject, message
+        }).returning();
+        res.json(newMsg[0]);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to send message" });
+    }
+});
+
+app.get("/api/messages", async (req, res) => {
+    try {
+        const allMsgs = await db.select().from(messages).orderBy(desc(messages.createdAt));
+        res.json(allMsgs);
+    } catch (err) {
+        res.status(500).json({ error: "Failed to fetch messages" });
+    }
+});
+
+app.put("/api/messages/:id/read", async (req, res) => {
+    try {
+        await db.update(messages).set({ status: 'read' }).where(eq(messages.id, Number(req.params.id)));
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to update message" });
     }
 });
 

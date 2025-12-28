@@ -43,6 +43,79 @@ export const translations = {
             subtitle: 'تابع أحدث نشاطات بي جروب في المؤتمرات والفعاليات الطبية',
             noEvents: 'لا توجد فعاليات حالياً',
             deleteConfirm: 'هل أنت متأكد من حذف هذه الفعالية؟'
+        },
+        search: {
+            placeholder: 'ابحث عن منتج...',
+            noResults: 'لا توجد نتائج بحث'
+        },
+        footer: {
+            company: 'الشركة',
+            products: 'المنتجات',
+            support: 'الدعم',
+            aboutUs: 'من نحن',
+            ourVision: 'رؤيتنا',
+            partners: 'شركائنا',
+            order: 'طلب منتجات',
+            careers: 'وظائف',
+            faq: 'أسئلة شائعة',
+            terms: 'شروط الخدمة',
+            desc: 'بي جروب للأدوية - شريكك الموثوق في الرعاية الصحية، نقدم أدوية مبتكرة منذ 2018.',
+            address: 'طنطا، الغربية، مصر',
+            rights: 'جميع الحقوق محفوظة لشركة بي جروب للأدوية.'
+        },
+        contact: {
+            title: 'تواصل معنا',
+            subtitle: 'نسعد بسماع صوتك. فريقنا موجود دائماً للمساعدة.',
+            visitUs: 'زرنا',
+            callUs: 'اتصل بنا',
+            emailUs: 'راسلنا',
+            workingHours: 'ساعات العمل',
+            workingDays: 'الأحد - الخميس: 9:00 ص - 5:00 م',
+            closed: 'الجمعة - السبت: مغلق',
+            firstName: 'الاسم الأول',
+            lastName: 'الاسم الأخير',
+            email: 'البريد الإلكتروني',
+            message: 'الرسالة',
+            send: 'إرسال الرسالة'
+        },
+        careers: {
+            title: 'انضم لفريقنا',
+            subtitle: 'نحن نتوسع بقوة ونبحث عن مواهب تساعدنا في تقديم التميز الدوائي.',
+            medRep: 'مندوب دعاية طبية',
+            medRepLoc: 'القاهرة، الإسكندرية، طنطا',
+            medRepDesc: 'نبحث عن مناديب نشيطين للانضمام لفريق المبيعات. يفضل خريجي صيدلة أو بيطري.',
+            rnd: 'أخصائي بحث وتطوير',
+            rndLoc: 'المقر الرئيسي - طنطا',
+            rndDesc: 'مطلوب خبير R&D لقسم تطوير التركيبات. خبرة 3 سنوات فأكثر.',
+            apply: 'قدم الآن',
+            noFit: 'لم تجد وظيفة مناسبة؟',
+            sendCv: 'أرسل سيرتك الذاتية مباشرة إلى'
+        },
+        faq: {
+            title: 'الأسئلة الشائعة',
+            subtitle: 'إجابات عن منتجاتنا، معايير التصنيع، وفرص الشراكة.',
+            q1: 'أين يتم تصنيع منتجاتكم؟',
+            a1: 'يتم تصنيع جميع منتجات بي جروب في مصانعنا بمصر، وفقاً لمعايير التصنيع الجيد (GMP) والمعايير الدولية.',
+            q2: 'هل توفرون شحن دولي؟',
+            a2: 'حالياً نخدم السوق المحلي بشكل أساسي. للاستفسارات الدولية يرجى التواصل مع قسم المبيعات.',
+            q3: 'هل منتجاتكم آمنة للأطفال؟',
+            a3: 'لدينا خط إنتاج مخصص للأطفال آمن وفعال. راجع دائماً النشرة الداخلية واستشر الطبيب.',
+            q4: 'كيف يمكن للصيدليات أن تصبح موزعين؟',
+            a4: 'يمكن للصيدليات والموزعين التواصل معنا مباشرة عبر صفحة "طلب منتجات" أو "تواصل معنا".'
+        },
+        terms: {
+            title: 'شروط الخدمة',
+            lastUpdated: 'آخر تحديث: ديسمبر 2025',
+            sec1: '1. قبول الشروط',
+            txt1: 'بمجرد استخدامك لموقع بي جروب، فأنت توافق على الالتزام بشروط هذه الاتفاقية.',
+            sec2: '2. إخلاء المسؤولية الطبية',
+            txt2: 'المحتوى المقدم هنا للأغراض المعلوماتية فقط ولا يغني عن استشارة الطبيب.',
+            sec3: '3. معلومات المنتجات',
+            txt3: 'نسعى لضمان دقة المعلومات، لكن النتائج قد تختلف من شخص لآخر.',
+            sec4: '4. سياسة الخصوصية',
+            txt4: 'استخدامك للموقع يخضع أيضاً لسياسة الخصوصية الخاصة بنا.',
+            sec5: '5. الملكية الفكرية',
+            txt5: 'جميع المحتويات هي ملك لشركة بي جروب ومحمية بموجب حقوق النشر.'
         }
     },
     en: {
@@ -89,6 +162,79 @@ export const translations = {
             subtitle: 'Follow the latest Bee Group activities in medical conferences',
             noEvents: 'No events found',
             deleteConfirm: 'Are you sure you want to delete this event?'
+        },
+        search: {
+            placeholder: 'Search for a product...',
+            noResults: 'No products found'
+        },
+        footer: {
+            company: 'Company',
+            products: 'Products',
+            support: 'Support',
+            aboutUs: 'About Us',
+            ourVision: 'Our Vision',
+            partners: 'Partners',
+            order: 'Order Products',
+            careers: 'Careers',
+            faq: 'FAQ',
+            terms: 'Terms of Service',
+            desc: 'Bee Group Pharmaceuticals - Your trusted partner in healthcare, delivering innovative medications since 2018.',
+            address: 'TANTA ,GARBIA ,EGYPT',
+            rights: 'Bee Group Pharmaceuticals. All rights reserved.'
+        },
+        contact: {
+            title: 'Get In Touch',
+            subtitle: "We'd love to hear from you. Our team is always here to help.",
+            visitUs: 'Visit Us',
+            callUs: 'Call Us',
+            emailUs: 'Email Us',
+            workingHours: 'Working Hours',
+            workingDays: 'Sun - Thu: 9:00 AM - 5:00 PM',
+            closed: 'Fri - Sat: Closed',
+            firstName: 'First Name',
+            lastName: 'Last Name',
+            email: 'Email',
+            message: 'Message',
+            send: 'Send Message'
+        },
+        careers: {
+            title: 'Join Our Team',
+            subtitle: 'We are strictly expanding and looking for talented individuals to help us deliver pharmaceutical excellence.',
+            medRep: 'Medical Representative',
+            medRepLoc: 'Cairo, Alexandria, Tanta',
+            medRepDesc: 'We are looking for energetic medical representatives to join our sales team. Pharmacy or Vet graduates preferred.',
+            rnd: 'R&D Specialist',
+            rndLoc: 'Tanta HQ',
+            rndDesc: 'Experienced R&D specialist needed for our formulation development department. 3+ years experience required.',
+            apply: 'Apply Now',
+            noFit: "Don't see a fit?",
+            sendCv: 'Send your CV directly to'
+        },
+        faq: {
+            title: 'Frequently Asked Questions',
+            subtitle: 'Common questions about our products, manufacturing standards, and partnership opportunities.',
+            q1: 'Where are your products manufactured?',
+            a1: 'All Bee Group products are manufactured in our state-of-the-art facilities in Egypt, adhering to strict GMP (Good Manufacturing Practice) guidelines and international quality standards.',
+            q2: 'Do you offer international shipping?',
+            a2: 'Currently, we primarily serve the local market. For international distribution inquiries, please contact our Sales department via the Contact page.',
+            q3: 'Are your products safe for children?',
+            a3: 'We have a specific pediatric line designed to be safe and effective for children. always refer to the specific age indications on each product\'s packaging and consult a healthcare professional.',
+            q4: 'How can pharmacies become distributors?',
+            a4: 'Pharmacies and distributors interested in partnering with us can reach out directly through our "Order Products" or "Contact Us" channels for partnership details.'
+        },
+        terms: {
+            title: 'Terms of Service',
+            lastUpdated: 'Last updated: December 2025',
+            sec1: '1. Acceptance of Terms',
+            txt1: 'By accessing and using the Bee Group Pharmaceuticals website, you accept and agree to be bound by the terms and provision of this agreement.',
+            sec2: '2. Medical Disclaimer',
+            txt2: 'The content provided on this website is for informational purposes only. It is not intended to be a substitute for professional medical advice, diagnosis, or treatment.',
+            sec3: '3. Product Information',
+            txt3: 'While we attempt to ensure that product descriptions and information are as accurate as possible, specific results may vary from person to person.',
+            sec4: '4. Privacy Policy',
+            txt4: 'Your use of the site is also governed by our Privacy Policy. Please review our Privacy Policy, which also governs the Site.',
+            sec5: '5. Intellectual Property',
+            txt5: 'All content included as part of the Service, such as text, graphics, logos, images, is the property of Bee Group Pharmaceuticals.'
         }
     }
 };

@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, date } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, date, integer } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
     id: serial("id").primaryKey(),
@@ -51,4 +51,56 @@ export const events = pgTable("events", {
     cover_image: text("cover_image"),
     gallery_images: text("gallery_images").array(),
     type: text("type").default('social'),
+});
+
+export const jobs = pgTable("jobs", {
+    id: serial("id").primaryKey(),
+    title: text("title").notNull(),
+    title_en: text("title_en"), // English Title
+    location: text("location"),
+    location_en: text("location_en"), // English Location
+    type: text("type").default("Full-time"), // Full-time, Part-time, etc.
+    type_en: text("type_en"), // English Type
+    description: text("description"),
+    description_en: text("description_en"),
+    requirements: text("requirements"),
+    requirements_en: text("requirements_en"),
+    salary_range: text("salary_range"),
+    salary_range_en: text("salary_range_en"),
+    experience_level: text("experience_level"),
+    experience_level_en: text("experience_level_en"),
+    work_mode: text("work_mode"),
+    work_mode_en: text("work_mode_en"),
+    benefits: text("benefits"),
+    benefits_en: text("benefits_en"),
+    isActive: text("is_active").default("true"),
+    createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const applications = pgTable("applications", {
+    id: serial("id").primaryKey(),
+    job_id: integer("job_id").references(() => jobs.id),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    linkedin_url: text("linkedin_url"),
+    portfolio_url: text("portfolio_url"),
+    experience_years: text("experience_years"),
+    expected_salary: text("expected_salary"),
+    graduation_year: text("graduation_year"),
+    cv_url: text("cv_url"),
+    message: text("message"),
+    status: text("status").default("pending"), // pending, reviewed, accepted, rejected
+    createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const messages = pgTable("messages", {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    phone: text("phone"),
+    subject: text("subject"),
+    message: text("message").notNull(),
+    status: text("status").default("unread"), // unread, read
+    createdAt: timestamp("created_at").defaultNow(),
 });
